@@ -34,5 +34,6 @@
             ]
         }
     },
-    "containerUser": "user"
+    "containerUser": "user",
+    "postCreateCommand": "pip install ."
 }
