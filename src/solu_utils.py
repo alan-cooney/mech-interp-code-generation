@@ -81,6 +81,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 def cuda_memory():
+    """Print the portion of GPU memory allocated, and the amount cached"""
     print(torch.cuda.memory_allocated()/1024 **
           3, torch.cuda.memory_cached()/1024**3)
 
@@ -146,9 +147,12 @@ if cfg['debug'] and not cfg['debug_overfit']:
     cfg['max_steps'] = 20
 # cfg['warmup_steps']=cfg['warmup_tokens']//cfg['tokens_per_step']
 pprint(cfg)
+
+# Set the random seeds
 torch.manual_seed(cfg['seed'])
 np.random.seed(cfg['seed'])
 random.seed(cfg['seed'])
+
 # %%
 # Plotting functions
 # This is mostly a bunch of over-engineered mess to hack Plotly into producing
@@ -156,7 +160,18 @@ random.seed(cfg['seed'])
 # want Plotly hacking practice
 
 
-def to_numpy(tensor, flat=False):
+def to_numpy(tensor, flat=False) -> np.ndarray:
+    """Convert a tensor into a numpy array
+
+    Also moves to the CPU (if on the GPU).
+
+    Args:
+        tensor (_type_): Tensor to convert
+        flat (bool, optional): Flatten the result Defaults to False.
+
+    Returns:
+        np.ndarray: Numpy array
+    """
     if type(tensor) != torch.Tensor:
         return tensor
     if flat:
@@ -319,6 +334,13 @@ def per_token_loss_fn(logits, batch):
 
 
 class Embed(nn.Module):
+    """Simple Embedding
+
+    Appears to initialise d_model x d_vocab weights, and then for each token it
+    selects the appropriate column from this. It rearranges to a tensor of shape
+    batch x position x d_model.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -333,6 +355,11 @@ class Embed(nn.Module):
 
 
 class FactoredEmbed(nn.Module):
+    """Factored Embedding
+
+    Currently not used.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -350,6 +377,14 @@ class FactoredEmbed(nn.Module):
 
 
 class Unembed(nn.Module):
+    """Unembed
+
+    Uses unembedding weights of size d_vocab x d_model (i.e. the usual way
+    round, unlike the embedding).
+
+    Returns a tensor of shape batch x position x d_vocab
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -363,6 +398,11 @@ class Unembed(nn.Module):
 
 
 class FactoredUnembed(nn.Module):
+    """Factored Unembedding
+
+    Currently not used.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -383,6 +423,15 @@ class FactoredUnembed(nn.Module):
 
 
 class PosEmbed(nn.Module):
+    """Positional Embedding
+
+    Creates positional weights of shape d_model x n_ctx (currently set at 1024
+    i.e. the same size as d_model, so 1024 x 1024)
+
+    Returns a matrix of size position x d_model (i.e no batch size, which makes
+    sense as it's the same for all batch items).
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -396,6 +445,11 @@ class PosEmbed(nn.Module):
 
 
 class LayerNormPre(nn.Module):
+    """Layer pre-normalization
+
+    We may need to remove this.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -412,6 +466,11 @@ class LayerNormPre(nn.Module):
 
 
 class LayerNorm(nn.Module):
+    """Layer normalization
+
+    We may need to remove this.
+    """
+
     def __init__(self, cfg, length):
         super().__init__()
         self.cfg = cfg
@@ -432,6 +491,11 @@ class LayerNorm(nn.Module):
 
 
 class RMSNorm(nn.Module):
+    """RMS Normalization
+
+    Can be used as an alternative to the layer normalization above.
+    """
+
     def __init__(self, cfg, length):
         super().__init__()
         self.cfg = cfg
@@ -452,6 +516,16 @@ class RMSNorm(nn.Module):
 
 
 class Attention(nn.Module):
+    """Attention
+
+    Creates 4 sets of weights and biases:
+
+        - Q -> queries
+        - K -> keys
+        - V -> values
+        - O -> outputs
+    """
+
     def __init__(self, cfg, attn_type='global'):
         super().__init__()
         self.cfg = cfg
@@ -544,6 +618,15 @@ class Attention(nn.Module):
 
 
 class MLP(nn.Module):
+    """MLP Layer
+
+    Uses weights & biases (in & out), with a SoLU activation function
+    inbetween.
+
+    W_in is d_mlp x d_model (i.e. changes size from d_model to d_mlp before
+    running SoLU), and then vice versa for W_out.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -586,6 +669,21 @@ class MLP(nn.Module):
 
 
 class TransformerBlock(nn.Module):
+    """Transformer block
+
+    NOTE: There was a bug below with RMS using LayerNorm by mistake - will
+    likely need to be folded into weights/biases anyway for our work.
+
+    Currently does:
+
+     - Attn
+     - Norm
+     - Add residual (norm + inputs)
+     - MLP
+     - Norm
+     - Add residual (norm + prev residual)  
+    """
+
     def __init__(self, cfg, block_index):
         super().__init__()
         self.cfg = cfg
