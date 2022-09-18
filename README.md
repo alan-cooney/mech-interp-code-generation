@@ -1,24 +1,12 @@
-# GitHub Codespaces Devcontainer - CUDA Template
+# SoLU Circuits
 
-Contains a default Devcontainer setup, based on Ubuntu, with:
+## Setup
 
- - CUDA
- - Python 
- - Jupyter Lab
-
-## Getting started
-
-### New repository
-
-[Use this template](https://github.com/alan-cooney/devcontainer-cuda/generate) on GitHub.
-
-### Existing repository
-
-Download the template files to your repository root directory:
+This project includes a [Devcontainer](https://containers.dev/) for one-click
+setup using Docker. To use this, open with
+e.g. [Github Codespaces](https://github.com/features/codespaces) or any other
+tool supporting Devcontianers. Then run:
 
 ```bash
-curl https://raw.githubusercontent.com/alan-cooney/devcontainer-cuda/main/.devcontainer/Dockerfile \
-  --create-dirs -o .devcontainer/Dockerfile
-curl https://raw.githubusercontent.com/alan-cooney/devcontainer-cuda/main/.devcontainer/devcontainer.json \
-  -o .devcontainer/devcontainer.json
+jupyter lab
 ```
