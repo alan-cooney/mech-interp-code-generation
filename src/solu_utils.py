@@ -1,47 +1,50 @@
 # Import stuff
+import pysvelte
+import plotly.io as pio
+import plotly.express as px
+import matplotlib.pyplot as plt
+import os
+import pickle
+from pathlib import Path
+import time
+import random
+import tqdm.notebook as tqdm
+import einops
+import numpy as np
+import torch.optim as optim
+import torch.nn.functional as F
+import torch.nn as nn
+import torch
+import plotly.graph_objects as go
+from torch.utils.data import DataLoader
+from functools import partial
+import pandas as pd
+import gc
+import collections
+import copy
+import itertools
+from transformers import AutoModelForCausalLM, AutoConfig, AutoTokenizer
+import transformers
+from datasets import load_dataset
+import json
+from transformers import AutoTokenizer
+import datasets
+import wandb
+from pprint import pprint
+import math
 import tqdm.auto as tqdm
 from rich import print
-from easy_transformer import EasyTransformer, HookedRootModule, HookPoint
-import pysvelte
-import math
-from pprint import pprint
+from easy_transformer import EasyTransformer
+from easy_transformer.hook_points import HookedRootModule, HookPoint
 import sys
-import wandb
-import datasets
-from transformers import AutoTokenizer
-import json
-from datasets import load_dataset
-import transformers
-from transformers import AutoModelForCausalLM, AutoConfig, AutoTokenizer
-import itertools
-import copy
-import collections
-import gc
-import pandas as pd
-from functools import partial
-from torch.utils.data import DataLoader
-import plotly.graph_objects as go
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-import numpy as np
-import einops
+from os import path
+import gdown
 
-import tqdm.notebook as tqdm
-
-import random
-import time
+sys.path.append('/home/user/.local/lib/python3.9/site-packages/pysvelte')
 
 # from google.colab import drive
-from pathlib import Path
-import pickle
-import os
 
-import matplotlib.pyplot as plt
 
-import plotly.express as px
-import plotly.io as pio
 pio.renderers.default = "notebook"
 
 
@@ -65,8 +68,8 @@ if "ipykernel_launcher" in os.path.basename(sys.argv[0]):
     print("Activated reload")
 # %%
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-dataset = datasets.load_from_disk(ROOT/"pile_29.hf")
-dataset = dataset.with_format(type='torch')
+# dataset = datasets.load_from_disk(ROOT/"pile_29.hf")
+# dataset = dataset.with_format(type='torch')
 # %%
 # import time
 # print("Sleeping")
@@ -91,7 +94,7 @@ def get_corner(tens, k=3):
 cfg = {
     'd_model': 1024,
     'normalization': 'RMS',  # 'LN' 'RMS' or None
-    'model_checkpoint_name': 'SoLU_1L_v9_final.pth',
+    'model_checkpoint_name': 'SoLU_1L_1024W_final_checkpoint.pth',
     # 'd_model':128,
     # 'normalization':None, # 'LN' 'RMS' or None
     # 'model_checkpoint_name':'SoLU_1L_v11_final.pth',
@@ -804,8 +807,16 @@ optimizer = torch.optim.AdamW(model.parameters(),
                               betas=cfg['betas'],
                               weight_decay=cfg['weight_decay'])
 # model.load_state_dict(torch.load('/workspace/solu_project/solu_checkpoints/SoLU_1L_v11_final.pth'))
-model.load_state_dict(torch.load(
-    '/workspace/solu_project/solu_checkpoints/'+cfg['model_checkpoint_name']))
+
+# Get the checkpoint if it doesn't exist
+checkpoint_url = "https://drive.google.com/file/d/16bqEZg9Oq0WT2xOcNS1HJkmR7qB2G14o/view"
+checkpoint_dir = "/tmp/checkpoints"
+checkpoint_file = path.join(checkpoint_dir, cfg['model_checkpoint_name'])
+os.makedirs(checkpoint_dir, exist_ok=True)
+if not path.exists(checkpoint_file):
+    gdown.download(checkpoint_url, checkpoint_file, quiet=False, fuzzy=True)
+
+model.load_state_dict(torch.load(checkpoint_file))
 model = (model.to(DTYPE))
 print(model)
 # %%
@@ -980,5 +991,5 @@ def print_neuron_logits(neuron_index, top_k=5):
     print("\n".join(l))
 
 
-stores_dict = load_stores_dict(
-    "/workspace/solu_project/max_act_solu_v2_1662711752.9306793/4328980.pt", cfg['d_mlp'], dtype=torch.float32)
+# stores_dict = load_stores_dict(
+#     "/workspace/solu_project/max_act_solu_v2_1662711752.9306793/4328980.pt", cfg['d_mlp'], dtype=torch.float32)
