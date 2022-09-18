@@ -16,7 +16,8 @@ dependencies = [
   "pysvelte@git+https://github.com/neelnanda-io/pysvelte",
   "wandb",
   "transformers",
-  "gdown"
+  "gdown",
+  "ipywidgets"
 ]
 name = "solu"
 version = "0.0.1"
