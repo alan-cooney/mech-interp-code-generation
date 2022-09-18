@@ -21,14 +21,15 @@ RUN sudo apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
   build-essential \
   curl \
+  expat \
   ffmpeg \
   git \
+  nodejs \
   poppler-utils \
   python3.9 \
   python3.9-dev \
   python3.9-distutils \
   python3.9-venv \
-  expat \
   rsync
 
 # Install pip (we need the latest version not the standard Ubuntu version, to
