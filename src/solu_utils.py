@@ -52,7 +52,7 @@ pio.renderers.default = "notebook"
 
 
 ROOT = Path('/workspace/solu_project/')
-DTYPE = torch.bfloat16
+DTYPE = torch.float32 # torch.bfloat16 is not supported
 test_var = 1
 # %%
 for i in tqdm.tqdm(range(1)):
