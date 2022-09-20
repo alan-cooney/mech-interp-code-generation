@@ -13,7 +13,6 @@ dependencies = [
   "pandas",
   "easy-transformer@git+https://github.com/neelnanda-io/Easy-Transformer",
   "rich",
-  "pysvelte@git+https://github.com/neelnanda-io/pysvelte",
   "wandb",
   "transformers",
   "gdown",

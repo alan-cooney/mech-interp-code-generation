@@ -53,3 +53,6 @@ RUN pip install \
   toml \
   yapf \
   jupyterlab
+
+# Clone PySvelte (we can't install it with pip due to the way it's setup)
+RUN git clone https://github.com/neelnanda-io/PySvelte.git /tmp/PySvelte
