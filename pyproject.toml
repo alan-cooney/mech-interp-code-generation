@@ -4,19 +4,20 @@ requires = ["setuptools"]
 
 [project]
 dependencies = [
-  "torch",
-  "numpy",
-  "einops",
-  "tqdm",
-  "plotly",
-  "matplotlib",
-  "pandas",
   "easy-transformer@git+https://github.com/neelnanda-io/Easy-Transformer",
-  "rich",
-  "wandb",
-  "transformers",
+  "einops",
   "gdown",
-  "ipywidgets"
+  "ipywidgets",
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "plotly",
+  "rich",
+  "termcolor",
+  "torch",
+  "tqdm",
+  "transformers",
+  "wandb"
 ]
 name = "solu"
 version = "0.0.1"
