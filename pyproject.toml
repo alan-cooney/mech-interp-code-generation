@@ -20,5 +20,5 @@ dependencies = [
   "wandb",
   "torchtyping"
 ]
-name = "solu"
+name = "micodegen"
 version = "0.0.1"
