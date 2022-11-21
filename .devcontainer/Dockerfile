@@ -29,7 +29,8 @@ RUN sudo apt-get update && \
   python3.9-distutils \
   python3.9-venv \
   expat \
-  rsync
+  rsync \
+  tmux
 
 # Install pip (we need the latest version not the standard Ubuntu version, to
 # support modern wheels)

@@ -18,7 +18,8 @@ dependencies = [
   "tqdm",
   "transformers",
   "wandb",
-  "torchtyping"
+  "torchtyping",
+  "tqdm"
 ]
-name = "micodegen"
+name = "codegen"
 version = "0.0.1"
