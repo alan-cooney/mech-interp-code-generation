@@ -19,7 +19,7 @@ dependencies = [
   "transformers",
   "wandb",
   "torchtyping",
-  "tqdm"
+  "circuitsvis"
 ]
 name = "codegen"
 version = "0.0.1"

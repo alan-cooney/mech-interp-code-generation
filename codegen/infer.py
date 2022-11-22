@@ -1,4 +1,4 @@
-
+"""Run a model on the dataset and save the results"""
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 from easy_transformer import loading_from_pretrained
@@ -9,7 +9,7 @@ import torch
 from easy_transformer import EasyTransformer
 import numpy as np
 from pathlib import Path
-from os import makedirs
+from os import makedirs, path
 import re
 
 
@@ -75,8 +75,36 @@ def run_batch(
     return correct_log_probs
 
 
-def save_batch_results(results: List[np.ndarray], model_name: str):
-    results_array = np.stack(results, axis=0)
+def get_checkpoint_path(model_name: str) -> Path:
+    """Get the path for the checkpoint file
+
+    Args:
+        model_name: Model name
+
+    Returns:
+        Path to the checkpoint file
+    """
+    # Directory (create if not exists)
+    checkpoint_dir = Path(__file__).parent / ".checkpoints" / model_name
+    makedirs(checkpoint_dir, exist_ok=True)
+
+    # Filename
+    file_name = re.sub('[^A-Za-z0-9]+', '', model_name)
+
+    # Combine
+    checkpoint_path = (checkpoint_dir / file_name).with_suffix(".npy")
+    return checkpoint_path
+
+
+def save_checkpoint(results: List[np.ndarray], model_name: str):
+    """Save results to a checkpoint
+
+    Args:
+        results (List[np.ndarray]): Results in batches
+        model_name (str): Model name
+    """
+    # Concatenate across batches
+    results_array = np.concatenate(results, axis=0)
 
     # Get the checkpoints path
     checkpoint_dir = Path(__file__).parent / ".checkpoints" / model_name
@@ -87,8 +115,22 @@ def save_batch_results(results: List[np.ndarray], model_name: str):
     np.save(checkpoint_path, results_array)
 
 
+def get_checkpoint(model_name: str) -> np.ndarray:
+    """Get the checkpoint for a model
+
+    Args:
+        model_name: Model name
+
+    Returns:
+        Checkpoint
+    """
+    checkpoint_path = get_checkpoint_path(model_name)
+    return np.load(checkpoint_path)
+
+
 def run_model(
-    model_name: loading_from_pretrained.OFFICIAL_MODEL_NAMES
+    model_name: loading_from_pretrained.OFFICIAL_MODEL_NAMES,
+    use_checkpoint: bool = True
 ) -> np.ndarray:
     """Get the correct log probabilities for a model
 
@@ -98,6 +140,12 @@ def run_model(
     Returns:
         Correct log probabilities for all the prompts & tokens in the dataset
     """
+    # Use the checkpoint if it exists
+    checkpoint_path = get_checkpoint_path(model_name)
+    if use_checkpoint & path.exists(checkpoint_path):
+        return get_checkpoint(model_name)
+
+    # Initialise model and dataset
     model = EasyTransformer.from_pretrained(model_name)
     batches = get_dataset()
 
@@ -110,6 +158,7 @@ def run_model(
     # For each batch
     batch_number = 0
     for batch_data in tqdm(batches):
+        # Get the results
         data: TensorType["batch_item", "token_position"] = batch_data["tokens"]
         batch_results = run_batch(model, data)
         results.append(batch_results.detach().cpu().numpy())
@@ -117,7 +166,7 @@ def run_model(
         # Save every x batches
         batch_number += 1
         if batch_number % 100 == 0:
-            save_batch_results(results, model_name)
+            save_checkpoint(results, model_name)
 
-    save_batch_results(results, model_name)
-    return results.stack(axis=0)
+    save_checkpoint(results, model_name)
+    return results.concatenate(axis=0)
