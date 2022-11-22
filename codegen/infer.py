@@ -163,10 +163,10 @@ def run_model(
         batch_results = run_batch(model, data)
         results.append(batch_results.detach().cpu().numpy())
 
-        # Save every x batches
+        # Save checkpoint every x batches
         batch_number += 1
-        if batch_number % 100 == 0:
+        if batch_number % 1000 == 0:
             save_checkpoint(results, model_name)
 
     save_checkpoint(results, model_name)
-    return results.concatenate(axis=0)
+    return np.concatenate(results, axis=0)
