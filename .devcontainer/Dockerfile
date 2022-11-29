@@ -23,6 +23,7 @@ RUN sudo apt-get update && \
   curl \
   ffmpeg \
   git \
+  git-lfs \
   poppler-utils \
   python3.9 \
   python3.9-dev \
