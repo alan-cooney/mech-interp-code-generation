@@ -164,3 +164,6 @@ PySvelte/
 
 # Checkpoints
 .checkpoints/
+
+# Data
+data
