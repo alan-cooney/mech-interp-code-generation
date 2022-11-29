@@ -7,7 +7,7 @@ dependencies = [
   "easy-transformer@git+https://github.com/neelnanda-io/Easy-Transformer",
   "einops",
   "gdown",
-  "ipywidgets",
+  "ipywidgets==7.7.2",
   "matplotlib",
   "numpy",
   "pandas",
@@ -19,7 +19,8 @@ dependencies = [
   "transformers",
   "wandb",
   "torchtyping",
-  "circuitsvis"
+  "circuitsvis",
+  "pytest"
 ]
 name = "codegen"
 version = "0.0.1"
