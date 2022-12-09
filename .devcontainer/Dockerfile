@@ -33,6 +33,9 @@ RUN sudo apt-get update && \
   rsync \
   tmux
 
+# Install poetry
+curl -sSL https://install.python-poetry.org | python3 -
+
 # Install pip (we need the latest version not the standard Ubuntu version, to
 # support modern wheels)
 RUN sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3.9 get-pip.py
