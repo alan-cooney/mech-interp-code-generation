@@ -17,8 +17,9 @@ transformers = "^4.25.1"
 tqdm = "^4.64.1"
 torchtyping = "^0.1.4"
 pytest = "^7.2.0"
-circuitsvis = "^1.28.0"
+circuitsvis = ">=1.29.0"
 jupyterlab = "^3.5.0"
+ipywidgets = "^8.0.3"
 
 [build-system]
 requires = ["poetry-core"]
