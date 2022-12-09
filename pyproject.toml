@@ -1,16 +1,15 @@
 [tool.poetry]
-name = "mech-interp-code-generation"
+name = "codegen"
 version = "0.1.0"
 description = ""
 authors = ["Alan <41682961+alan-cooney@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "mech_interp_code_generation"}]
+packages = [{include = "codegen"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-easy-transformer = {git = "https://github.com/neelnanda-io/Easy-Transformer"}
+easy-transformer = {git = "https://github.com/neelnanda-io/Easy-Transformer", rev="cb1ea2bf5d146276b6f6b824b3d37e3be4b47527"}
 matplotlib = "^3.6.2"
-ipywidgets = "7.7.2"
 numpy = "^1.23.5"
 pandas = "^1.5.2"
 plotly = "^5.11.0"
@@ -19,7 +18,7 @@ tqdm = "^4.64.1"
 torchtyping = "^0.1.4"
 pytest = "^7.2.0"
 circuitsvis = "^1.28.0"
-
+jupyterlab = "^3.5.0"
 
 [build-system]
 requires = ["poetry-core"]
