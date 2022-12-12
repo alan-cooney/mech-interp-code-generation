@@ -214,7 +214,7 @@ unicode-backport = ["unicodedata2"]
 
 [[package]]
 name = "circuitsvis"
-version = "1.29.0"
+version = "1.34.0"
 description = "Mechanistic Interpretability Visualizations"
 category = "main"
 optional = false
@@ -2200,7 +2200,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "2128182355fc23dd07a66ed545ef163b623662baff808c6d05d83ac44ab60295"
+content-hash = "32e1f43624dfa3c7b46eb6a29924e8009439329c9a48fca3b7264b68b5fc965f"
 
 [metadata.files]
 aiohttp = [
@@ -2438,8 +2438,8 @@ charset-normalizer = [
     {file = "charset_normalizer-2.1.1-py3-none-any.whl", hash = "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"},
 ]
 circuitsvis = [
-    {file = "circuitsvis-1.29.0-py3-none-any.whl", hash = "sha256:c993ed50430827eaaeb2694e781062edd373827b94d7cb8b241b7ec748ead156"},
-    {file = "circuitsvis-1.29.0.tar.gz", hash = "sha256:d4c9e2e346bd435401be31b86b48c10dca6b0c5eedeaf8ed55cc088c76222109"},
+    {file = "circuitsvis-1.34.0-py3-none-any.whl", hash = "sha256:0b999d0c58269fc0d73cc20a70527583b6c41b86b1ea92f36ccaac830be62dff"},
+    {file = "circuitsvis-1.34.0.tar.gz", hash = "sha256:81316bd81807b19a606a3957df3765bb2f2859342ff6c77c3c14b28ae44b0f9a"},
 ]
 click = [
     {file = "click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
