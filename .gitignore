@@ -168,3 +168,5 @@ PySvelte/
 # Data
 data
 *.csv
+*.bin
+*.npy
