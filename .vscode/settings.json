@@ -1,4 +1,5 @@
 {
-    "rewrap.autoWrap.enabled": true,
-    "editor.formatOnSave": true
+  "rewrap.autoWrap.enabled": true,
+  "editor.formatOnSave": true,
+  "cSpell.words": ["topk"]
 }

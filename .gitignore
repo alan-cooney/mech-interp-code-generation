@@ -167,3 +167,4 @@ PySvelte/
 
 # Data
 data
+*.csv
