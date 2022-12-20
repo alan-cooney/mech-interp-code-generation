@@ -8,7 +8,7 @@ packages = [{include = "codegen"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-easy-transformer = {git = "https://github.com/neelnanda-io/Easy-Transformer", rev="cb1ea2bf5d146276b6f6b824b3d37e3be4b47527"}
+transformer_lens = {git = "https://github.com/neelnanda-io/Easy-Transformer", rev="70712d4e3e1967e9acd4786fd033f39e02737ed6"}
 matplotlib = "^3.6.2"
 numpy = "^1.23.5"
 pandas = "^1.5.2"
